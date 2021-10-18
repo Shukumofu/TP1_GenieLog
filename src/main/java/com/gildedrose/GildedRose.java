@@ -3,71 +3,86 @@ package com.gildedrose;
 class GildedRose {
   Item[] items;
 
-  GildedRose(Item[] items) {
-    this.items = items;
+  GildedRose(Item[] item) {
+    this.items = item;
   }
 
-  public void updateBrie(int i) {
-    items[i].sellIn = items[i].sellIn - 1;
-    if (items[i].quality < 50) {
-      items[i].quality = items[i].quality + 1;
-    }
+  private void updateBrie(Item item) {
+    item.quality += 1;
   }
 
-  public void updateSulfuras(int i) {
-    items[i].quality = 80;
+  private void updateSulfuras(Item item) {
+    item.quality = 80;
   }
 
-  public void updateBackstage(int i) {
-    items[i].sellIn = items[i].sellIn - 1;
-
-    if (items[i].quality < 50) {
-      items[i].quality = items[i].quality + 1;
+  private void updateBackstage(Item item) {
+    if (item.sellIn < 11) {
+      item.quality += 1;
     }
-    if (items[i].quality < 50 && items[i].sellIn < 11) {
-      items[i].quality = items[i].quality + 1;
+    if (item.sellIn < 6) {
+      item.quality += 1;
     }
-    if (items[i].quality < 50 && items[i].sellIn < 6) {
-      items[i].quality = items[i].quality + 1;
-    }
-    if (items[i].sellIn < 0) {
-      items[i].quality = 0;
+    if (item.sellIn <= 0) {
+      item.quality = -1;
     }
   }
 
-  public void updateConjured(int i) {
-    items[i].sellIn = items[i].sellIn - 1;
-    if (items[i].quality > 1) {
-      items[i].quality = items[i].quality - 2;
-    }
-    if (items[i].quality > 1 && items[i].sellIn < 0) {
-      items[i].quality = items[i].quality - 2;
+  private void updateConjured(Item item) {
+    if (item.sellIn < 0) {
+      item.quality -= 2;
     }
   }
 
-  public void updateFoo(int i) {
-    items[i].sellIn = items[i].sellIn - 1;
-    if (items[i].quality > 0) {
-      items[i].quality = items[i].quality - 1;
+  private void updateFoo(Item item) {
+    if (item.sellIn <= 0) {
+      item.quality -= 1;
     }
-    if (items[i].quality > 0 && items[i].sellIn < 0) {
-      items[i].quality = items[i].quality - 1;
+  }
+
+  private void qualityCheck(Item item, int j) {
+    item.sellIn -= 1;
+    item.quality += j;
+
+    if (item.quality > 50) {
+      item.quality = 50;
+    }
+    if (item.quality < 0) {
+      item.quality = 0;
+    }
+  }
+
+  private void itemSort(Item item) {
+    switch (item.name) {
+      case "Aged Brie":
+        updateBrie(item);
+        qualityCheck(item, 0);
+        break;
+
+      case "Backstage passes to a TAFKAL80ETC concert":
+        updateBackstage(item);
+        qualityCheck(item, 1);
+        break;
+
+      case "Sulfuras, Hand of Ragnaros":
+        updateSulfuras(item);
+        break;
+
+      case "Conjured":
+        updateConjured(item);
+        qualityCheck(item, -2);
+        break;
+
+      default:
+        updateFoo(item);
+        qualityCheck(item, -1);
+        break;
     }
   }
 
   public void updateQuality() {
-    for (int i = 0; i < items.length; i++) {
-      if (items[i].name.equals("Aged Brie")) {
-        updateBrie(i);
-      } else if (items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-        updateBackstage(i);
-      } else if (items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-        updateSulfuras(i);
-      } else  if (items[i].name.equals("Conjured")) {
-        updateConjured(i);
-      } else {
-        updateFoo(i);
-      }
+
+    for (Item items : items) {
+      itemSort(items);
     }
   }
 }

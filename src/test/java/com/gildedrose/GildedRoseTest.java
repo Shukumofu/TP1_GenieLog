@@ -30,7 +30,7 @@ class GildedRoseTest {
         Item i = new Item("Aged Brie", -1, 60);
         GildedRose app = new GildedRose(new Item[]{i});
         app.updateQuality();
-        assertThat(i.quality,is(greaterThan(50)));
+        assertThat(i.quality,is(50));
   } 
 
  @Test
@@ -111,7 +111,7 @@ void handOfRagnarsellin(){
 
    @Test
  void backstage0(){
-        Item i = new Item("Backstage passes to a TAFKAL80ETC concert", 0, 51);
+        Item i = new Item("Backstage passes to a TAFKAL80ETC concert", 0, 49);
         GildedRose app = new GildedRose(new Item[]{i});
         int oldquality = i.quality;
         app.updateQuality();
@@ -151,7 +151,7 @@ void handOfRagnarsellin(){
         GildedRose app = new GildedRose(new Item[]{i});
         assertThat(i.quality,is(1));
         app.updateQuality();
-        assertThat(i.quality,is(1));
+        assertThat(i.quality,is(0));
   }
 
    @Test
